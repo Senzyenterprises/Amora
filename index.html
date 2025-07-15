@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <!-- Favicon -->
+  <link rel="icon" type="image/png" href="images/logo/Amora_logo__1_-removebg-preview.png" />
+  <title>Amora – Where Souls Meet</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600&family=Poppins&display=swap" rel="stylesheet">
+</head>
+<body>
+  <header class="hero-section">
+    <nav class="navbar">
+      <div class="logo">
+        <img src="images/logo/Amora_logo__1_-removebg-preview.png" alt="Amora Logo" />
+        <span>Amora</span>
+      </div>
+      <ul class="nav-links">
+        <li><a href="about.html">About</a></li>
+        <li><a href="#join">Join</a></li>
+        <li><a href="login.html">Login</a></li>
+      </ul>
+    </nav>
+
+    <!-- Floating Hearts -->
+    <div class="floating-hearts">
+      <span class="heart"></span>
+      <span class="heart"></span>
+      <span class="heart"></span>
+      <span class="heart"></span>
+      <span class="heart"></span>
+    </div>
+
+    <div class="hero-content">
+      <h1>Where Souls Meet Beyond the Surface</h1>
+      <p>Amora helps you discover love that lasts — through deep emotional connection and compatibility.</p>
+      <a href="signup.html" class="cta-button">Begin Your Journey</a>
+    </div>
+  </header>
+
+  <section class="how-it-works" id="how-it-works">
+    <h2>How Amora Works</h2>
+    <div class="steps">
+      <div class="step">
+        <h3>1. Compatibility Quiz</h3>
+        <p>Answer meaningful questions to generate your emotional aura.</p>
+      </div>
+      <div class="step">
+        <h3>2. Reveal by Connection</h3>
+        <p>Your profile unfolds gradually as connections deepen.</p>
+      </div>
+      <div class="step">
+        <h3>3. True Conversations</h3>
+        <p>No swiping. Just intention, clarity, and depth in every chat.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Testimonials Section -->
+<section class="testimonials">
+  <h2>❤️ Love Stories from Amora</h2>
+  <div class="carousel">
+    <div class="testimonial-slide active">
+      <blockquote>"We met on Amora early 2025. 6 months later, we're engaged!"</blockquote>
+      <p>- Simi & Daniel 💍</p>
+    </div>
+    <div class="testimonial-slide">
+      <blockquote>"From chats to chemistry! We're in a long-distance relationship now and it’s worth it."</blockquote>
+      <p>- K & J 🌍</p>
+    </div>
+    <div class="testimonial-slide">
+      <blockquote>"Didn’t expect anything serious but found someone truly kind. Thank you Amora!"</blockquote>
+      <p>- Ada ❤️</p>
+    </div>
+    <div class="testimonial-slide">
+      <blockquote>"We matched because of similar interests. I never believed in these things till now."</blockquote>
+      <p>- L & M 😊</p>
+    </div>
+    <div class="testimonial-slide">
+      <blockquote>"Been dating for 8 months after matching here. Feels like forever already!"</blockquote>
+      <p>- Tola & Chuks 💕</p>
+    </div>
+
+    <!-- Navigation arrows -->
+    <button class="carousel-prev">←</button>
+    <button class="carousel-next">→</button>
+  </div>
+</section>
+
+<!-- Ratings Section -->
+<section class="ratings">
+  <h2>⭐ Honest Ratings from Amora Users</h2>
+  <div class="stars-grid">
+    <div class="rating">
+      <span>⭐⭐⭐⭐⭐</span>
+      <p>"Best dating site I’ve tried. Clean and safe interface."</p>
+    </div>
+    <div class="rating">
+      <span>⭐⭐⭐⭐</span>
+      <p>"It’s not just looks — I got matched based on vibe too."</p>
+    </div>
+    <div class="rating">
+      <span>⭐⭐⭐⭐⭐</span>
+      <p>"User-friendly and no weird ads everywhere. Love it."</p>
+    </div>
+    <div class="rating">
+      <span>⭐⭐⭐</span>
+      <p>"Still hoping for better matches, but the experience is smooth."</p>
+    </div>
+  </div>
+</section>
+
+  <section class="join-section" id="join">
+    <h2>Ready to Meet Your Match?</h2>
+    <a href="signup.html" class="cta-button">Create an Account</a>
+  </section>
+
+  <footer class="footer">
+    <p>© 2025 Amora. Built with love.</p>
+  </footer>
+<!-- 🍪 Cookie Consent Banner -->
+<div id="cookieBanner" class="cookie-banner-full">
+  <p>
+    Amora uses cookies to enhance your experience and provide personalized matches.
+    Please accept to continue enjoying our services.
+  </p>
+  <div class="cookie-buttons">
+    <button id="acceptCookies">Accept</button>
+    <button id="declineCookies">Decline</button>
+  </div>
+</div>
+
+  <script>
+  const slides = document.querySelectorAll('.testimonial-slide');
+  let currentSlide = 0;
+
+  function showSlide(index) {
+    slides.forEach(slide => slide.classList.remove('active'));
+    slides[index].classList.add('active');
+  }
+
+  document.querySelector('.carousel-next').onclick = () => {
+    currentSlide = (currentSlide + 1) % slides.length;
+    showSlide(currentSlide);
+  };
+
+  document.querySelector('.carousel-prev').onclick = () => {
+    currentSlide = (currentSlide - 1 + slides.length) % slides.length;
+    showSlide(currentSlide);
+  };
+
+  // Optional: Auto-scroll every 6 seconds
+  setInterval(() => {
+    currentSlide = (currentSlide + 1) % slides.length;
+    showSlide(currentSlide);
+  }, 6000);
+</script>
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const cookieBanner = document.getElementById("cookieBanner");
+    const acceptBtn = document.getElementById("acceptCookies");
+    const declineBtn = document.getElementById("declineCookies");
+
+    const cookieChoice = localStorage.getItem("amora_cookie_consent");
+
+    if (!cookieChoice) {
+      // No choice saved — show banner
+      cookieBanner.style.display = "block";
+    }
+
+    acceptBtn.addEventListener("click", () => {
+      localStorage.setItem("amora_cookie_consent", "accepted");
+      cookieBanner.style.display = "none";
+    });
+
+    declineBtn.addEventListener("click", () => {
+      localStorage.setItem("amora_cookie_consent", "declined");
+      cookieBanner.style.display = "none";
+    });
+  });
+</script>
+
+<!-- Firebase SDK -->
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-functions.js"></script> 
+
+
+<!-- Your Firebase config -->
+<script src="firebase/firebase.js"></script>
+    <script src="js/main.js"></script>
+</body>
+</html>

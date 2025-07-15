@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <link rel="icon" type="image/png" href="images/logo/Amora_logo__1_-removebg-preview.png" />
+  <title>Compatibility Quiz | Amora</title>
+  <link rel="stylesheet" href="css/match.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet" />
+</head>
+<body class="match-body">
+
+  <div class="background-image-container"></div>
+
+  <div class="match-container">
+    <h1>💘 Compatibility Quiz</h1>
+    <p>Answer these to help us find your best match</p>
+
+    <form id="quizForm">
+      <label>What’s your gender?</label>
+      <select name="gender" required>
+        <option value="">-- Select --</option>
+        <option>Male</option>
+        <option>Female</option>
+        <option>Non-binary</option>
+        <option>Prefer not to say</option>
+      </select>
+
+      <label>What are you looking for?</label>
+      <select name="lookingFor" required>
+        <option value="">-- Select --</option>
+        <option>Male</option>
+        <option>Female</option>
+        <option>Any</option>
+      </select>
+
+      <label>What’s your age range?</label>
+      <select name="ageRange" required>
+        <option value="">-- Select --</option>
+        <option>18–25</option>
+        <option>26–35</option>
+        <option>36–45</option>
+        <option>46+</option>
+      </select>
+
+      <label>Relationship goal?</label>
+      <select name="goal" required>
+        <option value="">-- Select --</option>
+        <option>Casual</option>
+        <option>Serious</option>
+        <option>Just friends</option>
+        <option>Marriage</option>
+      </select>
+
+      <label>Top personality trait you seek?</label>
+      <select name="trait" required>
+        <option value="">-- Select --</option>
+        <option>Funny</option>
+        <option>Loyal</option>
+        <option>Ambitious</option>
+        <option>Caring</option>
+        <option>Adventurous</option>
+      </select>
+
+      <label>Pick a perfect first date idea</label>
+      <select name="dateIdea" required>
+        <option value="">-- Select --</option>
+        <option>Coffee</option>
+        <option>Beach</option>
+        <option>Museum</option>
+        <option>Hiking</option>
+        <option>Game night</option>
+      </select>
+
+      <button type="submit">See My Matches</button>
+      <a href="profile.html" class="profile-link">Back to Profile</a>
+    </form>
+  </div>
+
+  <div id="loadingOverlay" class="overlay">
+    <div class="overlay-content">
+      <div class="spinner"></div>
+      <p id="loadingMessage">Finding your perfect match...</p>
+    </div>
+  </div>
+
+  <div id="noMatchModal" class="overlay">
+    <div class="overlay-content">
+      <h2>Keep Checking Back!</h2>
+      <p>Finding that special connection takes time, but your perfect match could be just around the corner.</p>
+      <p>Stay positive! Your match will come soon. 😊</p>
+      <button id="closeNoMatchModal">Got It!</button>
+    </div>
+  </div>
+
+  <!-- Firebase Core -->
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-functions.js"></script> 
+
+<!-- Your Config -->
+<script src="firebase/firebase.js"></script>
+
+  <script src="js/match.js"></script>
+</body>
+</html>

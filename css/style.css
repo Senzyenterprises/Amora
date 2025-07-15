@@ -1,0 +1,393 @@
+/* Reset + Base */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+body {
+  font-family: 'Poppins', sans-serif;
+  background: #fff;
+  color: #222;
+  line-height: 1.6;
+}
+
+/* Navbar */
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 7%;
+  background: transparent;
+  position: fixed;
+  width: 100%;
+  top: 0;
+  z-index: 999;
+}
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-family: 'Cinzel', serif;
+  font-size: 24px;
+  font-weight: bold;
+  color: #e91e63;
+}
+.logo img {
+  height: 40px;
+}
+
+.logo img {
+  height: 40px;
+  background: white;
+  padding: 4px;
+  border-radius: 50%;
+}
+.nav-links {
+  display: flex;
+  list-style: none;
+  gap: 20px;
+}
+.nav-links a {
+  text-decoration: none;
+  color: white;
+  font-weight: 800;
+  transition: 0.3s;
+}
+.nav-links a:hover {
+  color: #f8bbd0;
+}
+
+/* Floating Hearts Animation */
+.floating-hearts {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 1;
+  overflow: hidden;
+}
+
+.floating-hearts .heart {
+  position: absolute;
+  bottom: -50px;
+  width: 20px;
+  height: 20px;
+  background-color: #e91e63;
+  clip-path: polygon(
+    50% 0%,
+    61% 10%,
+    70% 20%,
+    80% 35%,
+    80% 50%,
+    70% 65%,
+    50% 80%,
+    30% 65%,
+    20% 50%,
+    20% 35%,
+    30% 20%,
+    39% 10%
+  );
+  opacity: 0.8;
+  animation: floatHeart 8s linear infinite;
+}
+
+.floating-hearts .heart:nth-child(1) {
+  left: 10%;
+  animation-delay: 0s;
+  transform: scale(1);
+}
+
+.floating-hearts .heart:nth-child(2) {
+  left: 25%;
+  animation-delay: 2s;
+  transform: scale(0.8);
+}
+
+.floating-hearts .heart:nth-child(3) {
+  left: 50%;
+  animation-delay: 4s;
+  transform: scale(1.2);
+}
+
+.floating-hearts .heart:nth-child(4) {
+  left: 75%;
+  animation-delay: 1s;
+  transform: scale(0.9);
+}
+
+.floating-hearts .heart:nth-child(5) {
+  left: 90%;
+  animation-delay: 3s;
+  transform: scale(1.1);
+}
+
+@keyframes floatHeart {
+  0% {
+    bottom: -50px;
+    opacity: 0;
+    transform: translateX(0) scale(1);
+  }
+  25% {
+    opacity: 0.7;
+  }
+  50% {
+    transform: translateX(-20px) scale(1);
+  }
+  75% {
+    transform: translateX(20px) scale(1);
+    opacity: 0.5;
+  }
+  100% {
+    bottom: 100vh;
+    opacity: 0;
+  }
+}
+
+/* Hero Section */
+.hero-section {
+  background: url('../images/hero_bg.jpg') center/cover no-repeat;
+  height: 87vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-top: 80px;
+  text-align: center;
+  position: relative;
+}
+.hero-section::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(to bottom, rgba(0,0,0,0.6), rgba(0,0,0,0.2));
+  z-index: 1;
+}
+.hero-content {
+  position: relative;
+  z-index: 2;
+}
+.hero-content h1,
+.hero-content p {
+  color: white;
+}
+
+.hero-content h1 {
+  font-size: 3rem;
+  margin-bottom: 15px;
+  font-family: 'Cinzel', serif;
+}
+.hero-content p {
+  font-size: 1.1rem;
+  margin-bottom: 30px;
+}
+.cta-button {
+  background: #e91e63;
+  color: white;
+  padding: 12px 30px;
+  border: none;
+  border-radius: 30px;
+  text-decoration: none;
+  font-weight: 600;
+  box-shadow: 0 0 15px #e91e63b4;
+  transition: 0.3s ease-in-out;
+}
+.cta-button:hover {
+  background: #c2185b;
+  box-shadow: 0 0 25px #e91e63;
+}
+
+/* How It Works Section */
+.how-it-works {
+  padding: 80px 10%;
+  text-align: center;
+  background: #fdf5f9;
+}
+.how-it-works h2 {
+  font-size: 2.2rem;
+  color: #e91e63;
+  margin-bottom: 40px;
+}
+.steps {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 30px;
+}
+.step {
+  flex: 1;
+  min-width: 250px;
+  background: white;
+  border-radius: 12px;
+  padding: 25px;
+  box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+}
+
+.testimonials,
+.ratings {
+  padding: 50px 20px;
+  background: #fdf5f9;
+  text-align: center;
+}
+
+.testimonials h2,
+.ratings h2 {
+  color: #e91e63;
+  margin-bottom: 25px;
+  font-size: 2.2rem;
+}
+
+.carousel {
+  position: relative;
+  max-width: 700px;
+  margin: auto;
+  overflow: hidden;
+  min-height: 140px;
+}
+
+.testimonial-slide {
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  padding: 10px 20px;
+  transition: opacity 0.3s ease;
+}
+
+.testimonial-slide.active {
+  display: flex;
+}
+
+.testimonial-slide blockquote {
+  font-style: italic;
+  font-size: 16px;
+  color: #555;
+  margin-bottom: 10px;
+}
+
+.testimonial-slide p {
+  font-weight: 500;
+  color: #333;
+}
+
+.carousel-prev,
+.carousel-next {
+  position: absolute;
+  top: 40%;
+  background: #e91e63;
+  color: white;
+  border: none;
+  font-size: 18px;
+  padding: 8px 14px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.carousel-prev {
+  left: 10px;
+}
+.carousel-next {
+  right: 10px;
+}
+
+.stars-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 20px;
+  max-width: 700px;
+  margin: auto;
+}
+
+.rating span {
+  font-size: 20px;
+  color: gold;
+  display: block;
+  margin-bottom: 5px;
+}
+
+.rating p {
+  font-size: 14px;
+  color: #444;
+}
+
+/* Join Section */
+.join-section {
+  text-align: center;
+  padding: 70px 10%;
+  background: #fff0f6;
+}
+.join-section h2 {
+  font-size: 2rem;
+  margin-bottom: 30px;
+  color: #880e4f;
+}
+
+/* Footer */
+.footer {
+  padding: 20px;
+  text-align: center;
+  background: #fafafa;
+  font-size: 0.9rem;
+}
+
+/* 🍪 Full-width Cookie Banner */
+.cookie-banner-full {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background: #ffe6f0;
+  color: #4b0034;
+  padding: 16px 20px;
+  text-align: center;
+  z-index: 9999;
+  box-shadow: 0 -2px 8px rgba(255, 77, 166, 0.2);
+  font-family: 'Poppins', sans-serif;
+  display: none;
+  flex-wrap: wrap;
+}
+
+.cookie-banner-full p {
+  margin: 0;
+  font-size: 15px;
+  line-height: 1.5;
+}
+
+.cookie-buttons {
+  margin-top: 12px;
+}
+
+.cookie-buttons button {
+  margin: 5px 10px;
+  padding: 10px 18px;
+  border: none;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+  transition: background 0.3s ease;
+}
+
+#acceptCookies {
+  background-color: #ff4da6;
+  color: white;
+}
+
+#acceptCookies:hover {
+  background-color: #e84397;
+}
+
+#declineCookies {
+  background-color: #f5f5f5;
+  color: #333;
+}
+
+#declineCookies:hover {
+  background-color: #e0e0e0;
+}
+@media (max-width: 768px) {
+  .hero-section{
+    height: 70vh;
+  }
+}

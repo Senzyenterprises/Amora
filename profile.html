@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+<meta http-equiv="Pragma" content="no-cache" />
+<meta http-equiv="Expires" content="0" />
+
+  <title>Amora | Profile</title>
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="images/logo/Amora_logo__1_-removebg-preview.png" />
+
+  <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/profile.css" />
+</head>
+<body>
+  <main class="profile-page">
+    <section class="profile-card">
+      <div class="profile-left">
+        <img id="profileImage" src="images/icons/default_avatar.jpg" alt="Profile Picture" />
+        <input type="file" id="uploadImage" accept="image/*" style="display: none;" />
+        <button id="changeImageBtn">Change Picture</button>
+      </div>
+
+      <div class="profile-right">
+        <!-- View Mode -->
+        <div id="profileView">
+          <h2 id="viewName">Your Name</h2>
+          <p><strong>Email:</strong> <span id="viewEmail">you@mail.com</span></p>
+          <p><strong>Gender:</strong> <span id="viewGender">-</span></p>
+          <p><strong>Interested In:</strong> <span id="viewInterest">-</span></p>
+          <p><strong>Age:</strong> <span id="viewAge">-</span></p>
+          <p><strong>Registered On:</strong> <span id="viewRegistered">-</span></p>
+          <p><strong>Status:</strong> <span id="viewBadge">🌟 Novice</span></p>
+
+          <div class="view-actions">
+            <button id="editProfileBtn" class="btn-action edit">✏️ Edit</button>
+            <button class="btn-action chat" onclick="window.location.href='chat.html'">💬 Go to Chat</button>
+          </div>
+
+          <button type="button" id="logoutBtn" class="logout">Logout</button>
+        </div>
+
+        <!-- Edit Mode -->
+        <form id="editProfileForm" style="display: none;">
+          <label>Full Name</label>
+          <input type="text" id="editName" required />
+
+          <label>Email Address</label>
+          <input type="email" id="editEmail" disabled />
+
+          <label>Gender</label>
+          <select id="editGender">
+            <option value="">Select</option>
+            <option>Male</option>
+            <option>Female</option>
+            <option>Non-Binary</option>
+          </select>
+
+          <label>Interested In</label>
+          <select id="editInterest">
+            <option value="">Select</option>
+            <option>Male</option>
+            <option>Female</option>
+            <option>Anyone</option>
+          </select>
+
+          <label>Age</label>
+          <input type="number" id="editAge" min="18" />
+
+          <hr />
+
+          <label>Old Password</label>
+          <input type="password" id="oldPassword" />
+
+          <label>New Password</label>
+          <input type="password" id="newPassword" />
+
+          <label>Confirm New Password</label>
+          <input type="password" id="confirmPassword" />
+          <p id="passwordError" class="error-msg"></p>
+
+          <div class="form-buttons">
+            <button type="submit">Save Changes</button>
+            <button type="button" id="cancelEditBtn">Cancel</button>
+          </div>
+
+          <button type="button" id="logoutBtn" class="logout">Logout</button>
+        </form>
+      </div>
+    </section>
+  </main>
+<script>
+  if (performance.navigation.type === 2) {
+    location.reload(); // Force reload if user tries to go back from profile
+  }
+</script>
+<!-- Firebase Core -->
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-functions.js"></script>
+<script src="js/chat.js"></script>
+<!-- Your Config -->
+ <script src="firebase/firebase.js"></script>
+
+  <script src="js/profile.js"></script>
+</body>
+</html>

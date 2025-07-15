@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+     <link rel="icon" type="image/png" href="images/logo/amora_logo__1_-removebg-preview.png" />
+    <title>Amora - Chat</title>
+    <link rel="stylesheet" href="css/chat.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <div class="chat-container">
+        <!-- Sidebar for chats and navigation -->
+        <div class="sidebar">
+            <div class="sidebar-header">
+                <h2>Chats</h2>
+                <button id="menu-toggle" class="menu-toggle-btn"><i class="fas fa-bars"></i></button>
+            </div>
+            <div class="chat-list">
+                <h3>Pending Messages</h3>
+                <div id="pending-list">
+                    <!-- Pending chats will be dynamically added here -->
+                </div>
+                <h3>Chats</h3>
+                <div id="active-chat-list">
+                     <div class="chat-item ai-chat-item" data-chat-id="ai-chat">
+                        <img src="images/icons/default_avatar.jpg" alt="AI" class="profile-pic">
+                        <div class="chat-info">
+                            <p class="chat-name">Amora AI</p>
+                            <p class="last-message">Ask me anything!</p>
+                        </div>
+                        <span class="chat-timestamp">Now</span>
+                    </div>
+                    <!-- Active chats will be dynamically added here -->
+                </div>
+            </div>
+            <div class="sidebar-nav">
+                <a href="discover.html"><i class="fas fa-search"></i> Discover</a>
+                <a href="profile.html"><i class="fas fa-user"></i> Profile</a>
+                <a href="index.html" id="logout-btn"><i class="fas fa-home"></i> Home</a>
+            </div>
+        </div>
+
+        <!-- Main chat area -->
+        <div class="main-chat">
+            <div class="chat-header">
+                <button id="sidebar-toggle" class="sidebar-toggle-btn"><i class="fas fa-bars"></i></button>
+                <img src="images/icons/ai_avatar.jpg" alt="User" class="profile-pic" id="chat-partner-pic">
+                <h3 id="chat-partner-name">Amora AI</h3>
+                 <p id="typing-indicator" class="typing-indicator"></p>
+            </div>
+            <div class="chat-messages" id="chat-messages">
+                <!-- Messages will be dynamically added here -->
+            </div>
+            <div class="chat-input-area">
+                
+                <div class="input-container">
+                    <i class="far fa-smile emoji-btn" id="emoji-btn"></i>
+                    <input type="text" id="message-input" placeholder="Type a message...">
+                    <button id="send-btn"><i class="fas fa-paper-plane"></i></button>
+                </div>
+                 <div class="emoji-picker" id="emoji-picker">
+                    <!-- Emojis will be dynamically added here -->
+                </div>
+                <div class="warning-banner">
+                    <p>Never send money to someone you haven’t met in person.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Firebase SDK -->
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-functions.js"></script> 
+
+
+<!-- Your Firebase config -->
+<script src="firebase/firebase.js"></script>
+    <script src="js/chat.js"></script>
+</body>
+</html>

@@ -1,0 +1,429 @@
+/* General Styling */
+body {
+    font-family: 'Poppins', sans-serif;
+    margin: 0;
+    /*overflow: hidden;*/
+    background-color: #fff0f5; /* Light pink background */
+    color: #333333; /* Dark grey text */
+}
+
+.chat-container {
+    display: flex;
+    height: 100dvh; /* For modern browsers (Safari 15.4+, Chrome 108+) */
+    min-height: 100vh; /* Fallback for older browsers */
+}
+
+/* Sidebar */
+.sidebar {
+    width: 300px;
+    background-color: #ffffff; /* White sidebar */
+    border-right: 1px solid #ffd6e8; /* Soft pink border */
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.3s ease-in-out;
+}
+
+.sidebar-header {
+    padding: 20px;
+    border-bottom: 1px solid #ffd6e8; /* Soft pink border */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: linear-gradient(to right, #ffcee6, #ffe6f0); /* Soft pink gradient */
+}
+
+.sidebar-header h2 {
+    margin: 0;
+    font-size: 24px;
+    color: #333333;
+}
+
+.menu-toggle-btn {
+    display: none; /* Hidden on desktop */
+    background: none;
+    border: none;
+    font-size: 24px; /* Slightly larger for better touch target */
+    cursor: pointer;
+    color: #d9b3c2; /* Accent color for icons */
+}
+
+.chat-list {
+    flex-grow: 1;
+    overflow-y: auto;
+}
+
+.chat-list h3 {
+    padding: 10px 20px;
+    margin: 0;
+    font-size: 16px;
+    color: #888888; /* Softer grey */
+    background-color: #fcf4f7; /* Very light pink for section headers */
+    border-bottom: 1px solid #ffe6f0; /* Soft border */
+}
+
+.chat-item {
+    display: flex;
+    align-items: center;
+    padding: 15px 20px;
+    cursor: pointer;
+    border-bottom: 1px solid #ffe6f0; /* Softer border */
+    transition: background-color 0.2s, box-shadow 0.2s; /* Add box-shadow transition */
+}
+
+.chat-item:hover, .chat-item.active {
+    background-color: #ffe8f2; /* Lighter pink on hover/active */
+    box-shadow: inset 3px 0 0 #ff8fa3; /* Subtle left border on hover/active */
+}
+
+.profile-pic {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    margin-right: 15px;
+    object-fit: cover; /* Ensure image covers the area */
+    border: 1px solid #d9b3c2; /* Subtle border for profile pics */
+}
+
+.chat-info {
+    flex-grow: 1;
+}
+
+.chat-name {
+    font-weight: 600;
+    margin: 0;
+    color: #333333;
+}
+
+.last-message {
+    color: #777777; /* Soft grey for last message */
+    margin: 0;
+    font-size: 14px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.chat-timestamp {
+    font-size: 10px; /* Smaller timestamp */
+    color: #999999; /* Softer timestamp color */
+}
+
+.sidebar-nav {
+    padding: 20px;
+    border-top: 1px solid #ffd6e8; /* Soft pink border */
+}
+
+.sidebar-nav a {
+    display: block;
+    color: #555555;
+    text-decoration: none;
+    padding: 10px 0;
+    font-size: 16px;
+    transition: color 0.2s;
+}
+
+.sidebar-nav a:hover {
+    color: #ff8fa3; /* Pink on hover */
+}
+
+.sidebar-nav a i {
+    margin-right: 10px;
+    color: #d9b3c2; /* Accent color for icons */
+}
+
+/* Main Chat Area */
+.main-chat {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    background-color: #fff0f5; /* Main chat background, matching body */
+}
+
+.chat-header {
+    display: flex;
+    align-items: center;
+    padding: 15px 20px;
+    background-color: #ffffff; /* White header background */
+    border-bottom: 1px solid #ffd6e8; /* Soft pink border */
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05); /* Subtle shadow for depth */
+}
+
+.sidebar-toggle-btn {
+    display: none; /* Hidden on desktop */
+    background: none;
+    border: none;
+    font-size: 24px; /* Larger for mobile touch target */
+    margin-right: 15px;
+    cursor: pointer;
+    color: #d9b3c2; /* Accent color for icons */
+}
+
+#chat-partner-name {
+    margin: 0;
+    font-size: 20px;
+    color: #333333;
+    font-weight: 600;
+}
+
+.typing-indicator {
+    font-style: italic;
+    color: #d9b3c2; /* Accent color for typing indicator */
+    margin-left: 10px;
+    font-size: 14px;
+}
+
+.chat-messages {
+    flex-grow: 1;
+    padding: 20px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    /* Smooth scroll behavior */
+    scroll-behavior: smooth;
+     padding-bottom: calc(70px + env(safe-area-inset-bottom));
+}
+
+/* Message entry animation */
+.message {
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fadeInSlideUp 0.3s ease-out forwards;
+    margin-bottom: 15px;
+    max-width: 70%;
+    position: relative; /* For timestamp positioning */
+}
+
+/* Delay for message animations (optional, for staggered effect) */
+.message:nth-child(n+1) { animation-delay: 0s; } /* Adjust as needed for stagger */
+
+
+@keyframes fadeInSlideUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+
+.message-date {
+    text-align: center;
+    color: #999999;
+    font-size: 12px;
+    margin: 10px auto; /* Center with auto margins */
+    background-color: rgba(255, 255, 255, 0.7); /* Slightly transparent white for date bubble */
+    padding: 5px 10px;
+    border-radius: 15px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+}
+
+.message.sent {
+    align-self: flex-end;
+}
+
+.message.received {
+    align-self: flex-start;
+}
+
+.message .bubble {
+    padding: 10px 15px;
+    border-radius: 16px; /* Rounded corners for messages */
+    line-height: 1.5;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1); /* Soft drop shadow */
+    position: relative; /* For the small "tail" if desired later */
+}
+
+.message.sent .bubble {
+    background-color: #ff8fa3; /* Sender Bubble (You) - Medium Pink */
+    color: #ffffff; /* White text for sender */
+    /* Removed specific border-bottom-right-radius for more consistent rounded look */
+}
+
+.message.received .bubble {
+    background-color: #ffffff; /* Receiver Bubble (Them) - White */
+    color: #333333; /* Dark grey text for receiver */
+    /* Removed specific border-bottom-left-radius */
+}
+
+.message .timestamp {
+    font-size: 10px; /* Smaller timestamp */
+    color: #999999; /* Softer grey */
+    margin-top: 5px;
+    /* Positioning relative to the bubble for more control */
+    position: absolute;
+    bottom: -15px; /* Adjust as needed */
+    white-space: nowrap; /* Prevent wrapping */
+}
+
+.message.sent .timestamp {
+    right: 0; /* Align timestamp to the right of sent bubble */
+}
+
+.message.received .timestamp {
+    left: 0; /* Align timestamp to the left of received bubble */
+}
+
+
+.chat-input-area {
+    padding: 15px 20px; /* Slightly reduced padding */
+    background-color: #ffffff; /* White background */
+    border-top: 1px solid #ffd6e8; /* Soft pink border */
+    box-shadow: 0 -1px 3px rgba(0,0,0,0.05); /* Subtle shadow for depth */
+    
+}
+
+.warning-banner {
+    text-align: center;
+    font-size: 12px;
+    color: #888888; /* Softer grey */
+    margin-bottom: 10px;
+}
+
+.input-container {
+    display: flex;
+    align-items: center;
+}
+
+#message-input {
+    flex-grow: 1;
+    border: 1px solid #ffd6e8; /* Soft pink border */
+    border-radius: 25px; /* More rounded */
+    padding: 10px 18px; /* More padding */
+    font-size: 16px;
+    outline: none;
+    background-color: #fdfdfd; /* Very subtle off-white for input */
+    transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+
+#message-input:focus {
+    border-color: #ff8fa3; /* Focus border in medium pink */
+    box-shadow: 0 0 0 2px rgba(255, 143, 163, 0.2); /* Soft pink glow on focus */
+}
+
+.emoji-btn, #send-btn {
+    background: none;
+    border: none;
+    font-size: 26px; /* Slightly larger icons */
+    cursor: pointer;
+    color: #d9b3c2; /* Accent color for icons */
+    margin: 0 8px; /* Slightly adjusted margin */
+    transition: color 0.2s ease-in-out, transform 0.2s ease-in-out;
+}
+
+#send-btn {
+    color: #ff8fa3; /* Send button in medium pink */
+}
+
+.emoji-btn:hover, #send-btn:hover {
+    color: #ff5c7a; /* Darker pink on hover */
+    transform: scale(1.1); /* Subtle grow effect */
+}
+
+.emoji-picker {
+    display: none; /* Hidden by default, toggled by JS adding/removing 'open' class */
+    background-color: #ffffff;
+    border: 1px solid #ffd6e8; /* Soft pink border */
+    border-radius: 12px; /* Slightly more rounded */
+    padding: 10px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.15); /* Stronger, softer shadow */
+    z-index: 100; /* Ensure it's above other content */
+
+    /* --- Key changes for scrollable container behavior --- */
+    width: 320px; /* Fixed width for the picker on desktop */
+    max-height: 250px; /* Set a max height to enable scrolling */
+    overflow-y: auto; /* Enable vertical scrolling */
+
+    /* Styling for the scrollbar (optional, but good for aesthetics) */
+    scrollbar-width: thin; /* Firefox */
+    scrollbar-color: #d9b3c2 #f0f0f0; /* thumb color track color */
+}
+
+/* Class to control visibility with JavaScript */
+.emoji-picker.open {
+    display: block; /* Show the picker when this class is applied */
+}
+
+/* For Webkit browsers (Chrome, Safari) */
+.emoji-picker::-webkit-scrollbar {
+    width: 8px; /* width of the scrollbar */
+}
+
+.emoji-picker::-webkit-scrollbar-track {
+    background: #f0f0f0; /* color of the scrollbar track */
+    border-radius: 10px;
+}
+
+.emoji-picker::-webkit-scrollbar-thumb {
+    background-color: #d9b3c2; /* color of the scrollbar thumb */
+    border-radius: 10px;
+    border: 2px solid #f0f0f0; /* creates space around scrollbar thumb */
+}
+/* Mobile Responsive */
+@media (max-width: 768px) {
+    .sidebar {
+        position: fixed;
+        left: 0;
+        top: 0;
+        height: 100%;
+        z-index: 1000;
+        transform: translateX(-100%);
+        box-shadow: 2px 0 5px rgba(0,0,0,0.1); /* Add shadow to sidebar when open */
+    }
+
+    .sidebar.open {
+        transform: translateX(0);
+    }
+
+    .menu-toggle-btn, .sidebar-toggle-btn {
+        display: block;
+    }
+
+    .main-chat {
+        width: 100%;
+    }
+
+    .message {
+        max-width: 85%; /* Allow messages to take up more width on smaller screens */
+    }
+
+      .emoji-picker {
+        /*
+         * These properties (left, transform, width, max-width, bottom)
+         * will be set by JavaScript's positionEmojiPicker() function
+         * using 'position: fixed;'.
+         * However, keeping them here provides a good default or fallback
+         * for the *desired* mobile appearance, and JS will calculate
+         * the precise 'fixed' values.
+         */
+        left: 50%; /* Center it horizontally */
+        transform: translateX(-50%);
+        width: 90%; /* Make emoji picker wider, but not full width */
+        max-width: 300px; /* Limit max width */
+        bottom: 70px; /* Adjust if your mobile input area is different */
+    }
+    .chat-input-area{
+    /*position: fixed;*/ /* Keep it fixed relative to the viewport */
+    bottom: 0; /* Stick to the very bottom */
+    left: 0; /* Span full width from left */
+    width: 100%; /* Span full width */
+    z-index: 99; /* Ensure it's above other content */
+    /* Add safe area inset for iPhone X and newer models. */
+    padding-bottom: calc(15px + env(safe-area-inset-bottom));
+    }
+}
+
+/* Additional utility for info messages inside chat-messages */
+.info-message {
+    text-align: center;
+    color: #888888;
+    font-size: 14px;
+    margin-top: 20px;
+}
+
+.error-message {
+    color: #ff5c7a; /* A slightly stronger pink/red for errors */
+    font-weight: 600;
+}

@@ -1,0 +1,164 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Poppins', sans-serif;
+  background: #fff4fa;
+  padding: 40px 20px;
+}
+
+.profile-page {
+  max-width: 1000px;
+  margin: auto;
+}
+
+.profile-card {
+  background: white;
+  border-radius: 16px;
+  padding: 40px;
+  display: flex;
+  gap: 40px;
+  box-shadow: 0 12px 25px rgba(0, 0, 0, 0.1);
+  flex-wrap: wrap;
+}
+
+.profile-left {
+  flex: 1;
+  text-align: center;
+}
+
+.profile-left img {
+  width: 180px;
+  height: 180px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 5px solid #e91e63;
+}
+
+#changeImageBtn {
+  margin-top: 12px;
+  background: #e91e63;
+  color: white;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.profile-right {
+  flex: 2;
+}
+
+.profile-right h2 {
+  font-size: 1.8rem;
+  margin-bottom: 10px;
+  color: #e91e63;
+}
+
+.profile-right p {
+  font-size: 0.95rem;
+  margin-bottom: 8px;
+}
+
+form label {
+  display: block;
+  margin-top: 15px;
+  font-weight: 600;
+}
+
+form input,
+form select {
+  width: 100%;
+  padding: 10px;
+  border-radius: 8px;
+  margin-top: 5px;
+  border: 1px solid #ccc;
+  font-size: 0.95rem;
+}
+
+.form-buttons {
+  display: flex;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.form-buttons button {
+  flex: 1;
+  padding: 12px;
+  font-weight: 600;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.form-buttons button:first-child {
+  background: #e91e63;
+  color: white;
+}
+
+.form-buttons button:last-child {
+  background: #f1f1f1;
+  color: #e91e63;
+}
+
+/* Logout button */
+#logoutBtn.logout {
+  margin-top: 30px;
+  background-color: #f44336;
+  color: #fff;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+#logoutBtn.logout:hover {
+  background-color: #d32f2f;
+}
+
+.error-msg {
+  color: red;
+  font-size: 0.85rem;
+}
+
+.view-actions {
+  margin-top: 20px;
+  display: flex;
+  gap: 12px;
+}
+
+
+.btn-action {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.3s ease;
+  color: #fff;
+}
+
+.btn-action.edit {
+  background-color: #ff4081;
+}
+.btn-action.edit:hover {
+  background-color: #e91e63;
+}
+
+.btn-action.chat {
+  background-color: #3f51b5;
+}
+.btn-action.chat:hover {
+  background-color: #303f9f;
+}
+
+/* In your CSS file */
+.readonly-input {
+    background-color: #e0e0e0; /* Light gray background */
+    cursor: not-allowed; /* Indicate it's not editable */
+}

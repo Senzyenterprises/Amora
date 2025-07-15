@@ -1,0 +1,392 @@
+/* Import Google Fonts for a luxurious feel */
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Poppins:wght@300;400;500;600;700&display=swap');
+
+/* Universal Box-Sizing for consistent layout */
+* {
+    box-sizing: border-box;
+}
+
+/* Base Body Styles for Discover Page - The "Rose Quartz Mist" Background */
+body.discover-body {
+    font-family: 'Poppins', sans-serif; /* General body text */
+    background: linear-gradient(to bottom, #FFDDEE, #FFF0F5); /* Soft, subtle rose quartz to blush white gradient */
+    padding: 30px 20px;
+    min-height: 100vh;
+    color: #333333; /* Default dark grey text */
+    line-height: 1.6; /* Improved readability */
+    overflow-x: hidden; /* Prevent horizontal scroll on some mobile layouts */
+}
+
+/* Discover Container - The "Soft Perfume Bottle" */
+.discover-container {
+    max-width: 1000px; /* Slightly wider for an expansive feel */
+    margin: 0 auto;
+    text-align: center;
+    padding: 40px; /* More generous padding inside the container */
+    background: rgba(255, 255, 255, 0.95); /* Glass-like white with slight transparency */
+    border-radius: 30px; /* More rounded corners like velvet boxes */
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.18); /* Deeper, softer glow shadow */
+    position: relative; /* For potential future relative positioning needs */
+    overflow: hidden; /* Ensure content stays within rounded corners */
+}
+
+/* Main Heading - "💞 Your Matches" with Rose-Gold Shimmer */
+h1 {
+    font-family: 'Playfair Display', serif; /* Elegant, modern serif font */
+    color: #b56e54; /* A sophisticated rose-gold color */
+    font-size: 3.5rem; /* Larger, more impactful heading */
+    margin-bottom: 10px;
+    font-weight: 700; /* Bolder font weight */
+    text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.5), /* Subtle white shimmer */
+                 -1px -1px 2px rgba(255, 255, 255, 0.5); /* Another subtle shimmer direction */
+    letter-spacing: -0.02em; /* Slightly tighter letter spacing for elegance */
+}
+
+/* Match Summary/Tagline - "Finding connections made just for you…" */
+#match-summary {
+    font-family: 'Poppins', sans-serif;
+    color: #a08c8c; /* Light grey with a pinkish undertone */
+    margin-bottom: 50px; /* More space below summary */
+    font-size: 1.15rem; /* Slightly larger, more delicate text */
+    max-width: 700px; /* Constrain width for better readability */
+    margin-left: auto;
+    margin-right: auto;
+    font-weight: 300; /* Lighter font weight */
+    letter-spacing: 0.03em; /* Gentle letter spacing for a delicate bow effect */
+}
+
+/* Match Results Grid - "Pinterest Mood Board" Flow */
+.match-results {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); /* Slightly wider min for cards */
+    gap: 30px; /* More space between cards */
+    padding: 0 10px; /* Subtle horizontal padding to prevent cards from touching screen edges on small mobiles */
+    align-items: start; /* Align cards to the top of their grid cells */
+}
+
+/* Individual Match Card - "Soft as Satin" Personal Invites */
+.match-card {
+    background: #fff8fc; /* Pastel pinkish-white background */
+    padding: 30px; /* More generous padding inside the card */
+    border-radius: 25px; /* Embracing rounded corners */
+    box-shadow: 0 18px 40px rgba(0,0,0,0.1); /* Deeper, softer shadow for more depth */
+    transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94), box-shadow 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94); /* Smoother, bouncier transitions */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between; /* Pushes button to bottom */
+    position: relative; /* For any internal positioning */
+}
+
+.match-card:hover {
+    transform: translateY(-10px) scale(1.02); /* More pronounced lift and subtle scale on hover */
+    box-shadow: 0 25px 55px rgba(0,0,0,0.18); /* More intense shadow on hover */
+}
+
+.match-card img {
+    width: 100%;
+    height: 280px; /* Taller images for better impact */
+    object-fit: cover;
+    border-radius: 20px; /* Matches card rounding, but slightly less */
+    margin-bottom: 20px; /* More space below image */
+    box-shadow: 0 8px 20px rgba(0,0,0,0.1); /* Soft shadow for image */
+}
+
+.match-card h3 {
+    font-family: 'Playfair Display', serif; /* Stylish typography for names */
+    margin: 0 0 10px; /* Adjusted margin */
+    color: #e91e63; /* Your primary accent color */
+    font-size: 1.8rem; /* Larger, bolder name */
+    font-weight: 700; /* Bold font */
+    letter-spacing: -0.01em;
+}
+
+.match-card p {
+    font-size: 1rem; /* Slightly larger body text */
+    color: #7d6b7b; /* Pink-tinted grey */
+    margin-bottom: 15px; /* More space between paragraphs */
+    flex-grow: 1; /* Allows text content to take up available space */
+    font-weight: 300; /* Lighter font for descriptions */
+}
+
+/* User's own Match Card (Me up there should be center) */
+.match-card.user-card {
+    grid-column: 1 / -1; /* Make it span all columns of the grid */
+    justify-self: center; /* Center the card horizontally within its grid area */
+    max-width: 400px; /* Limit its width so it doesn't stretch too wide on large screens */
+    background: #e6f7ff; /* A subtle different background color to distinguish "You" */
+    box-shadow: 0 18px 40px rgba(100, 150, 200, 0.15); /* Slightly different shadow */
+}
+
+
+/* Common Traits Count */
+.common-traits-count {
+    font-weight: 600; /* Semi-bold */
+    color: #ff6e8c; /* A nice coral hue */
+    margin-top: 10px;
+    margin-bottom: 20px;
+    font-size: 1.05em;
+    display: block; /* Ensure it takes its own line */
+}
+
+/* Retake Quiz Button - "A Piece of Jewelry" */
+.retake-button {
+    background-color: #e91e63; /* Velvet pink */
+    color: white;
+    padding: 15px 35px; /* More generous padding */
+    border: none; /* No border for the button */
+    border-radius: 30px; /* Very rounded edges */
+    cursor: pointer;
+    font-size: 1.1em;
+    font-weight: 600; /* Semi-bold text */
+    margin-top: 40px; /* More space above */
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: fit-content; /* Adjust width to content */
+    box-shadow: 0 8px 20px rgba(233, 30, 99, 0.3); /* Subtle drop-shadow */
+    transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+}
+
+.retake-button:hover {
+    background-color: #d41858; /* Richer rose on hover */
+    transform: translateY(-3px); /* Subtle lift on hover */
+    box-shadow: 0 12px 25px rgba(233, 30, 99, 0.4); /* Enhanced shadow on hover */
+}
+
+/* Chat Now Button on match cards */
+.chat-button {
+    background-color: #66bb6a; /* Vibrant green (consistent, but refined) */
+    color: white;
+    padding: 15px 25px; /* More padding */
+    border: none; /* No border for the button */
+    border-radius: 12px; /* More rounded button */
+    cursor: pointer;
+    font-size: 1em;
+    font-weight: 600;
+    margin-top: 20px; /* More space above button */
+    width: 100%;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.15); /* Soft shadow */
+    transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+}
+
+.chat-button:hover {
+    background-color: #4CAF50; /* Darker green on hover */
+    transform: translateY(-2px); /* Subtle lift */
+    box-shadow: 0 8px 20px rgba(0,0,0,0.25); /* Enhanced shadow */
+}
+
+/* Separator Line - Adjusted spacing */
+.match-separator {
+    grid-column: 1 / -1; /* Make it span all columns in the grid */
+    border: 0; /* Ensures no border */
+    height: 1px;
+    background-image: linear-gradient(to right, rgba(233, 30, 99, 0), rgba(233, 30, 99, 0.75), rgba(233, 30, 99, 0)); /* Gradient using your accent color */
+    width: 70%; /* Slightly narrower for elegance */
+    max-width: 500px; /* Max width for separator */
+    margin: 30px auto 10px auto; /* TOP: 30px from user card/retake button, BOTTOM: 10px to heading (reduced) */
+}
+
+/* Potential Connections Heading - Adjusted spacing */
+.potential-connections-heading {
+    font-family: 'Playfair Display', serif; /* Consistent elegant font */
+    font-size: 2.5rem; /* Larger and more impactful */
+    color: #e91e63; /* Your primary brand color */
+    margin-top: 10px; /* TOP: 10px from separator (reduced) */
+    margin-bottom: 40px; /* BOTTOM: 40px before match cards start */
+    text-align: center;
+    grid-column: 1 / -1; /* Make it span all columns */
+    padding: 0 10px;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+}
+
+/* --- Overlay and Modal Base Styles (Adjusted for consistency) --- */
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.8); /* Slightly darker, more luxurious overlay */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;
+}
+
+.overlay.show {
+    opacity: 1;
+    visibility: visible;
+}
+
+.overlay-content {
+    background-color: #ffffff;
+    padding: 50px 60px; /* More generous padding */
+    border-radius: 20px; /* More rounded */
+    text-align: center;
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4); /* Stronger, softer shadow */
+    max-width: 500px; /* Slightly wider modal */
+    width: 90%;
+    transform: translateY(-40px); /* More pronounced initial lift */
+    transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94); /* Smoother animation curve */
+}
+
+.overlay.show .overlay-content {
+    transform: translateY(0);
+}
+
+.overlay-content h2 {
+    font-family: 'Playfair Display', serif; /* Consistent elegant font */
+    color: #e91e63; /* Use accent color for modal title */
+    margin-bottom: 25px;
+    font-size: 2.5rem; /* Larger, bolder title */
+    font-weight: 700;
+}
+
+.overlay-content p {
+    color: #666666;
+    margin-bottom: 35px; /* More space below text */
+    line-height: 1.7;
+    font-size: 1.1rem; /* Slightly larger text */
+}
+
+/* Congratulations Modal Button */
+#closeCongratulationsModal {
+    background-color: #e91e63; /* Primary accent color */
+    color: white;
+    padding: 15px 35px; /* More padding */
+    border: none;
+    border-radius: 10px; /* Rounded button */
+    cursor: pointer;
+    font-size: 1.1rem; /* Slightly larger text */
+    font-weight: 600; /* Semi-bold */
+    transition: background-color 0.2s ease, transform 0.2s ease;
+    box-shadow: 0 5px 15px rgba(233, 30, 99, 0.3);
+}
+
+#closeCongratulationsModal:hover {
+    background-color: #d41858; /* Darker on hover */
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(233, 30, 99, 0.4);
+}
+
+/* --- Responsive Adjustments - "On Mobile, Everything Shifts Fluidly" --- */
+@media (max-width: 768px) {
+    body.discover-body {
+        padding: 20px 15px; /* Reduced padding on smaller screens */
+    }
+
+    .discover-container {
+        padding: 30px 20px; /* Reduced container padding */
+        border-radius: 20px; /* Slightly less rounded */
+        box-shadow: 0 15px 40px rgba(0, 0, 0, 0.12); /* Lighter shadow */
+    }
+
+    h1 {
+        font-size: 2.5rem; /* Smaller heading on mobile */
+        margin-bottom: 8px;
+    }
+
+    #match-summary {
+        font-size: 1rem;
+        margin-bottom: 40px;
+        padding: 0 5px; /* Add padding to summary text */
+    }
+
+    .match-results {
+        gap: 25px; /* Slightly less gap on mobile */
+        grid-template-columns: 1fr; /* Stack cards vertically on typical mobile view */
+        padding: 0; /* Remove horizontal padding here, handled by body/container padding */
+    }
+
+    .match-card {
+        padding: 25px; /* Slightly less padding */
+        border-radius: 20px; /* Slightly less rounded */
+        box-shadow: 0 10px 25px rgba(0,0,0,0.08); /* Lighter shadow */
+    }
+
+    .match-card img {
+        height: 220px; /* Slightly shorter images on mobile */
+    }
+
+    .match-card h3 {
+        font-size: 1.6rem; /* Smaller name */
+    }
+
+    .chat-button {
+        padding: 12px 20px; /* Slightly smaller button padding */
+        font-size: 0.95em;
+    }
+
+    .match-separator {
+        margin: 25px auto 10px auto; /* Adjusted margins for mobile */
+        width: 85%; /* Wider on small screens */
+    }
+
+    .potential-connections-heading {
+        font-size: 2rem;
+        margin-top: 10px; /* Adjusted margins for mobile */
+        margin-bottom: 30px;
+    }
+
+    .retake-button {
+        padding: 12px 30px;
+        font-size: 1em;
+    }
+
+    .overlay-content {
+        padding: 40px 30px; /* Reduced modal padding */
+        border-radius: 15px; /* Less rounded modal */
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3); /* Lighter shadow */
+        width: 95%; /* Wider on very small screens */
+    }
+
+    .overlay-content h2 {
+        font-size: 2rem; /* Smaller modal title */
+    }
+
+    .overlay-content p {
+        font-size: 1rem; /* Smaller modal text */
+    }
+
+    #closeCongratulationsModal {
+        padding: 12px 25px;
+        font-size: 1em;
+    }
+}
+
+/* Even smaller adjustments for very small mobile screens (e.g., iPhone SE) */
+@media (max-width: 480px) {
+    h1 {
+        font-size: 2.2rem;
+    }
+    #match-summary {
+        font-size: 0.95rem;
+        margin-bottom: 30px;
+    }
+    .match-card {
+        padding: 20px;
+    }
+    .match-card img {
+        height: 180px;
+    }
+    .match-card h3 {
+        font-size: 1.4rem;
+    }
+    .chat-button {
+        padding: 10px 18px;
+        font-size: 0.9em;
+    }
+    .match-separator {
+        margin: 20px auto 8px auto; /* Further reduced margin for very small screens */
+        width: 90%;
+    }
+    .potential-connections-heading {
+        font-size: 1.8rem;
+        margin-top: 8px; /* Further reduced margin for very small screens */
+        margin-bottom: 25px;
+    }
+}

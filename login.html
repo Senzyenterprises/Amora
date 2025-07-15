@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+      <!-- Favicon -->
+  <link rel="icon" type="image/png" href="images/logo/Amora_logo__1_-removebg-preview.png" />
+  <title>Login to Amora</title>
+  <link rel="stylesheet" href="css/auth.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
+</head>
+<body class="auth-body">
+  <div class="auth-container">
+    <div class="auth-logo">
+      <img src="images/logo/Amora_logo__1_-removebg-preview.png" alt="Amora Logo" />
+    </div>
+    <h1>Welcome Back</h1>
+    <p>Login to continue your journey</p>
+
+    <form id="loginForm">
+      <input type="email" id="loginEmail" placeholder="Email Address" required />
+      <div class="password-field">
+        <input type="password" placeholder="Password" id="loginPassword" required />
+        <button type="button" id="togglePassword" class="eye-toggle" aria-label="Toggle Password">👁️</button>
+      </div>
+
+      <button type="submit">Login</button>
+    </form>
+
+    <!-- Forgot Password Link -->
+<p class="forgot-text">
+  <a href="#" id="forgotPasswordLink">Forgot Password?</a>
+</p>
+
+<!-- Password Reset Section -->
+<div id="resetSection" style="display: none;">
+  <h3>Reset Your Password</h3>
+  <input type="email" id="resetEmail" placeholder="Enter your email" required />
+  <button id="sendResetLinkBtn">Send Reset Code</button>
+  <p id="resetMessage" class="message"></p>
+  <p id="countdownTimer" class="timer" style="display: none;"></p>
+  <button id="backToLoginBtn">Back to Login</button>
+</div>
+
+    <p class="login-link">Don’t have an account? <a href="signup.html">Join Amora</a></p>
+    <a href="index.html" class="back-to-home-link">← Back to Home</a>
+  </div>
+<script>
+  const togglePassword = document.getElementById("togglePassword");
+  const loginPassword = document.getElementById("loginPassword");
+
+  togglePassword.addEventListener("click", function () {
+    const type = loginPassword.type === "password" ? "text" : "password";
+    loginPassword.type = type;
+    togglePassword.textContent = type === "password" ? "👁️" : "🙈";
+  });
+</script>
+<!-- Load Firebase core and required services FIRST -->
+<!-- Firebase Core -->
+  <!-- Firebase Core -->
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-functions.js"></script> 
+
+<script src="firebase/firebase.js"></script>
+
+<script src="js/auth.js"></script>
+</body>
+</html>

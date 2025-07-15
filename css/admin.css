@@ -1,0 +1,131 @@
+/* General Body and Container Styles */
+.admin-body {
+    font-family: 'Poppins', sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background: linear-gradient(135deg, #fce4ec 0%, #ffebee 100%); /* Soft, rosy gradient */
+    margin: 0;
+    padding: 20px;
+    box-sizing: border-box; /* Include padding in element's total width and height */
+}
+
+.admin-login-container {
+    background-color: #fff;
+    padding: 40px;
+    border-radius: 12px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    width: 100%;
+    max-width: 420px; /* Wider for better input spacing */
+    position: relative; /* For absolute positioning of elements inside if needed */
+}
+
+/* Logo */
+.auth-logo img {
+    max-width: 100px; /* Adjust as needed */
+    margin-bottom: 25px;
+}
+
+/* Headings and Paragraphs */
+.admin-login-container h1 {
+    color: #333;
+    margin-bottom: 15px;
+    font-size: 28px;
+}
+
+.admin-login-container p {
+    color: #777;
+    margin-bottom: 30px;
+    font-size: 15px;
+}
+
+/* Form Inputs */
+#adminLoginForm input[type="email"],
+#adminLoginForm input[type="password"] {
+    width: calc(100% - 20px); /* Account for padding */
+    padding: 14px 10px;
+    margin-bottom: 20px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 16px;
+    box-sizing: border-box;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+#adminLoginForm input[type="email"]:focus,
+#adminLoginForm input[type="password"]:focus {
+    border-color: #FF69B4; /* Amora Pink on focus */
+    box-shadow: 0 0 0 3px rgba(255, 105, 180, 0.2); /* Soft glow */
+    outline: none;
+}
+
+/* Submit Button */
+#adminLoginForm button {
+    width: 100%;
+    padding: 15px;
+    background-color: #FF69B4; /* Amora Pink */
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 18px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+#adminLoginForm button:hover {
+    background-color: #e652a2; /* Darker pink on hover */
+    transform: translateY(-2px);
+}
+
+#adminLoginForm button:active {
+    transform: translateY(0);
+}
+
+/* Error Message */
+.error-message {
+    color: #d32f2f; /* Red for errors */
+    background-color: #ffebee; /* Light red background */
+    border: 1px solid #ef9a9a;
+    padding: 12px;
+    margin-bottom: 20px;
+    border-radius: 8px;
+    text-align: left;
+    font-size: 14px;
+    display: none; /* Hidden by default, shown by JS */
+}
+
+/* Back to Home Link (consistent with other pages) */
+.back-to-home-link {
+    display: block; /* Makes it take full width, pushes content below */
+    text-align: left; /* Aligns the arrow and text to the left */
+    margin-bottom: 25px; /* Adds space between the link and the main heading */
+    color: #FF69B4; /* Use your brand's pink color */
+    text-decoration: none; /* Remove underline */
+    font-size: 15px; /* A bit smaller than headings, easy to read */
+    font-weight: 500; /* Slightly bolder than regular text */
+    transition: color 0.2s ease, transform 0.2s ease; /* Smooth transition for hover */
+}
+
+.back-to-home-link:hover {
+    color: #e652a2; /* Darker pink on hover */
+    transform: translateX(-3px); /* Subtle slide effect on hover */
+}
+
+/* Responsive adjustments */
+@media (max-width: 600px) {
+    .admin-login-container {
+        padding: 30px 25px;
+        margin: 15px;
+    }
+
+    .admin-login-container h1 {
+        font-size: 24px;
+    }
+
+    .auth-logo img {
+        max-width: 80px;
+    }
+}

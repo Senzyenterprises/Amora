@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Discover Matches | Amora</title>
+
+  <link rel="icon" type="image/png" href="images/logo/amora_logo__1_-removebg-preview.png" />
+
+  <link rel="stylesheet" href="css/discover.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet" />
+</head>
+<body class="discover-body">
+  <div class="discover-container">
+    <h1>💞 Your Matches</h1>
+    <p id="match-summary">Loading matches...</p>
+
+    <button id="retakeQuizBtn" class="retake-button" style="display: none;">Retake Quiz</button>
+
+    <div id="matchResults" class="match-results">
+      </div>
+
+    <div id="noMatchesFound" class="info-message" style="display: none;">
+        <p>No new matches found at the moment. Keep checking back, or try adjusting your quiz answers!</p>
+    </div>
+  </div>
+
+  <div id="congratulationsModal" class="overlay">
+    <div class="overlay-content">
+      <h2>🎉 Congratulations! 🎉</h2>
+      <p>We've found a potential match just for you!</p>
+      <p>Explore your connections and start chatting!</p>
+      <button id="closeCongratulationsModal">Awesome!</button>
+    </div>
+  </div>
+
+  <audio id="matchSound" src="audio/match-alert.mp3.mp3" preload="auto"></audio>
+
+ <!-- Firebase SDK -->
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-functions.js"></script>
+
+   <script src="firebase/firebase.js"></script>
+
+   <script src="js/discover.js"></script>
+
+</body>
+</html>
