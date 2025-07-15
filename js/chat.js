@@ -67,9 +67,14 @@ function getAIResponse(message) {
     }
 }
 
-function displayMessage(message) {
+function displayMessage(message, messageId = null) { // Added messageId parameter
     const messageElement = document.createElement("div");
     messageElement.classList.add("message");
+
+    if (messageId) {
+        messageElement.dataset.messageId = messageId; // CRITICAL: Add this for updates/removals
+    }
+
     const isMyMessage = currentUser && message.senderId === currentUser.uid;
 
     if (isMyMessage) {
@@ -85,28 +90,25 @@ function displayMessage(message) {
         timestampDate = new Date(message.timestamp.seconds * 1000);
     } else {
         timestampDate = new Date(); // Fallback to current time if timestamp is invalid
+        console.warn("Message has invalid timestamp, using current time:", message);
     }
-
-    // --- START MODIFIED CODE ---
 
     // 1. Create the timestamp element
     const timestampSpan = document.createElement('span');
-    timestampSpan.classList.add('timestamp'); // Use 'timestamp' class as per CSS
+    timestampSpan.classList.add('timestamp');
     timestampSpan.textContent = timestampDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
 
     // 2. Create the message bubble element
     const bubbleDiv = document.createElement('div');
     bubbleDiv.classList.add('bubble');
 
-    // 3. Create the message text element (optional, can directly use textContent on bubbleDiv if no other inner elements)
+    // 3. Create the message text element
     const messageTextSpan = document.createElement('span');
     messageTextSpan.classList.add('message-text');
     messageTextSpan.textContent = message.text;
-    bubbleDiv.appendChild(messageTextSpan); // Append text to the bubble
+    bubbleDiv.appendChild(messageTextSpan);
 
     // 4. Append elements to messageElement in the correct order for flexbox
-    // For sent messages, the bubble should appear first in HTML to be on the right
-    // For received messages, the timestamp should appear first in HTML to be on the left
     if (isMyMessage) { // This is a 'sent' message
         messageElement.appendChild(bubbleDiv);
         messageElement.appendChild(timestampSpan);
@@ -115,20 +117,28 @@ function displayMessage(message) {
         messageElement.appendChild(bubbleDiv);
     }
 
-    // --- END MODIFIED CODE ---
-
     chatMessages.appendChild(messageElement);
-    // Auto-scroll to the bottom of the chat
-    chatMessages.scrollTop = chatMessages.scrollHeight;
+    // Auto-scroll to the bottom of the chat (This will be done by loadMessages now, for efficiency)
+    // chatMessages.scrollTop = chatMessages.scrollHeight; // REMOVE this line from displayMessage
 }
 
 function setTypingStatus(isTyping) {
     if (currentChatId === 'ai-chat' || !currentUser) return;
-    
+
+    // 👇👇👇 ADD THIS CHECK 👇👇👇
+    if (!currentChatId) {
+        console.warn("Cannot set typing status: currentChatId is null or undefined.");
+        return;
+    }
+    // 👆👆👆 ADD THIS CHECK 👆👆👆
+
     const typingUpdate = {};
     typingUpdate[`typing.${currentUser.uid}`] = isTyping;
 
-    firestore.collection('chats').doc(currentChatId).update(typingUpdate);
+    firestore.collection('chats').doc(currentChatId).update(typingUpdate)
+        .catch(error => {
+            console.error("Error updating typing status:", error);
+        });
 
     if (isTyping) {
         clearTimeout(typingTimeout);
@@ -172,69 +182,113 @@ async function findOrCreateChat(user1Id, user2Id) {
 }
 
 function loadMessages(chatId) {
+    // CRITICAL: Ensure chatId is valid at the very beginning
+    if (!chatId) {
+        console.error("loadMessages called with invalid chatId:", chatId);
+        chatMessages.innerHTML = '<div style="text-align:center; padding: 20px; color: #888;">Cannot load messages: Invalid chat ID.</div>';
+        chatPartnerName.textContent = "Error";
+        chatPartnerPic.src = 'images/icons/default_avatar.jpg';
+        if (messagesUnsubscribe) messagesUnsubscribe(); // Unsubscribe if there was an old listener
+        currentChatId = null; // Ensure global state is consistent
+        return;
+    }
+
     // 1. Unsubscribe from previous chat's messages to avoid memory leaks
     if (messagesUnsubscribe) {
         messagesUnsubscribe();
         console.log("Unsubscribed from previous messages listener.");
     }
 
-    // 2. Clear current messages from the display only when switching chats or initiating a new load
-    // This is crucial: the actual clearing must happen *before* the new listener is set up.
-    chatMessages.innerHTML = '';
+    currentChatId = chatId; // Ensure currentChatId is updated globally
+
+    // 2. Set a loading indicator immediately when a chat is selected
+    chatMessages.innerHTML = '<div style="text-align: center; padding: 20px; color: #888;">Loading messages...</div>';
 
     // 3. Handle AI chat separately
     if (chatId === 'ai-chat') {
         chatPartnerName.textContent = "Amora AI";
         chatPartnerPic.src = "images/icons/ai_avatar.jpg";
-        // Display initial AI message
+        chatMessages.innerHTML = ''; // Clear loading, then add AI specific content
         const aiMessage = {
             text: "Hello! I'm Amora, your friendly AI assistant. How can I help you?",
             senderId: 'ai',
-            timestamp: { seconds: Date.now() / 1000, nanoseconds: 0 } // Ensure displayMessage can handle this
+            timestamp: { seconds: Date.now() / 1000, nanoseconds: 0 }
         };
-        displayMessage(aiMessage);
-        // No Firestore listener for AI chat
-        return;
+        displayMessage(aiMessage); // Call your displayMessage function
+        chatMessages.scrollTop = chatMessages.scrollHeight; // Scroll to bottom for AI
+        return; // No Firestore listener for AI chat
     }
 
     // 4. Set up the Firestore listener for the current chat's messages
-    let lastDate = null; // To handle date separators in chat
+    let lastDateForSeparator = null; // Used for initial full render to manage date separators
     messagesUnsubscribe = firestore.collection('chats').doc(chatId).collection('messages')
-        .orderBy('timestamp', 'asc') // CRITICAL: Order by timestamp
+        .orderBy('timestamp', 'asc') // CRITICAL: Order messages by timestamp
         .onSnapshot(snapshot => {
-            // This logic needs to differentiate between initial load and real-time updates.
-            // A common pattern is to re-render the *entire* chat content on *every* snapshot
-            // if efficiency is not a critical concern, or manage docChanges carefully.
-            // Given your current `displayMessage` appends, clearing for every snapshot
-            // and re-adding from the full snapshot.docs is the safest.
+            // Check if this is the very first time messages are loaded for this chat, or if a full refresh is needed
+            // A simple check is if chatMessages is currently showing the "Loading messages..." text.
+            let isFirstLoadOfChat = chatMessages.innerHTML.includes('Loading messages...');
+            // Also, if the snapshot contains only 'added' changes and all existing elements are gone,
+            // it's safer to re-render everything.
 
-            chatMessages.innerHTML = ''; // **Clear messages for every snapshot change**
-                                        // This ensures the view is always consistent with the DB
-                                        // and prevents duplicates, though it might cause a slight flicker.
-                                        // For true real-time append without flicker, you'd track
-                                        // `change.type` and update specific elements. But this is simpler to start.
+            if (isFirstLoadOfChat || snapshot.docChanges().some(change => change.type === 'removed' || change.type === 'modified')) {
+                // If it's the initial load OR if there are removals/modifications (requiring a full rebuild for simplicity)
+                chatMessages.innerHTML = ''; // Clear ALL messages and separators
+                lastDateForSeparator = null; // Reset for new full render
 
-            lastDate = null; // Reset lastDate for new snapshot processing
+                snapshot.docs.forEach(doc => {
+                    const message = doc.data();
+                    const messageId = doc.id;
+                    if (!message.timestamp) { console.warn("Message missing timestamp:", message); return; }
 
-            snapshot.docs.forEach(doc => { // Iterate through all documents in the snapshot
-                const message = doc.data();
-                if (!message.timestamp) {
-                    console.warn("Message missing timestamp:", message);
-                    return; // Skip messages without a timestamp
-                }
+                    const timestampDate = message.timestamp.toDate ? message.timestamp.toDate() : new Date(message.timestamp.seconds * 1000);
+                    const messageDate = timestampDate.toLocaleDateString();
 
-                const timestampDate = message.timestamp.toDate ? message.timestamp.toDate() : new Date(message.timestamp.seconds * 1000);
-                const messageDate = timestampDate.toLocaleDateString();
+                    if (messageDate !== lastDateForSeparator) {
+                        const dateElement = document.createElement('div');
+                        dateElement.className = 'message-date';
+                        dateElement.textContent = timestampDate.toLocaleDateString([], { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+                        dateElement.dataset.messageDate = messageDate; // Store for comparison later
+                        chatMessages.appendChild(dateElement);
+                        lastDateForSeparator = messageDate;
+                    }
+                    displayMessage(message, messageId); // Pass messageId
+                });
+            } else {
+                // For subsequent updates where only new messages are added, append them
+                snapshot.docChanges().forEach(change => {
+                    if (change.type === "added") {
+                        const message = change.doc.data();
+                        const messageId = change.doc.id;
+                        if (!message.timestamp) { console.warn("Message missing timestamp:", message); return; }
 
-                if (messageDate !== lastDate) {
-                    const dateElement = document.createElement('div');
-                    dateElement.className = 'message-date';
-                    dateElement.textContent = timestampDate.toLocaleDateString([], { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
-                    chatMessages.appendChild(dateElement);
-                    lastDate = messageDate;
-                }
-                displayMessage(message); // This function appends the message
-            });
+                        // Check for date separator for new messages
+                        const timestampDate = message.timestamp.toDate ? message.timestamp.toDate() : new Date(message.timestamp.seconds * 1000);
+                        const messageDate = timestampDate.toLocaleDateString();
+
+                        // Find the last message's date to decide if a new date separator is needed
+                        const lastMessageElement = chatMessages.querySelector('.message:last-of-type');
+                        const lastDisplayedMessageDate = lastMessageElement ? (lastMessageElement.previousElementSibling?.dataset?.messageDate || lastMessageElement.dataset?.messageDate) : null;
+                        // This logic can be tricky; simpler to just check if `lastDateForSeparator` needs update
+                        // or if the new message's date is different from the last displayed message's date.
+                        // For robust date separators with incremental updates, you might need a more complex
+                        // DOM insertion logic (e.g., insertBefore based on timestamp).
+                        // For now, let's use a simpler heuristic for appended messages:
+                        if (messageDate !== lastDateForSeparator && messageDate !== lastDisplayedMessageDate) {
+                            const dateElement = document.createElement('div');
+                            dateElement.className = 'message-date';
+                            dateElement.textContent = timestampDate.toLocaleDateString([], { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+                            dateElement.dataset.messageDate = messageDate;
+                            chatMessages.appendChild(dateElement);
+                            lastDateForSeparator = messageDate; // Update last date seen
+                        }
+
+                        displayMessage(message, messageId); // Append the new message
+                    }
+                    // For modified/removed, the full refresh handles it, or you'd add specific logic here:
+                    // else if (change.type === "modified") { ... update existing message by messageId ... }
+                    // else if (change.type === "removed") { ... remove message by messageId ... }
+                });
+            }
 
             // 5. Scroll to the bottom after messages are loaded/added
             chatMessages.scrollTop = chatMessages.scrollHeight;
@@ -243,6 +297,42 @@ function loadMessages(chatId) {
             console.error("Error loading messages:", error);
             chatMessages.innerHTML = `<p class="error-message">Could not load messages. ${error.message}</p>`;
         });
+
+    // Update header for this specific chat (always fetch to ensure it's correct)
+    firestore.collection('chats').doc(chatId).get().then(chatDoc => {
+        if (chatDoc.exists) {
+            const chatData = chatDoc.data();
+            if (chatData && chatData.participants) {
+                const otherUserId = chatData.participants.find(id => id !== currentUser.uid);
+                if (otherUserId) { // Ensure otherUserId is valid
+                    firestore.collection('users').doc(otherUserId).get().then(userDoc => {
+                        if (userDoc.exists) {
+                            const user = userDoc.data();
+                            chatPartnerName.textContent = user.name || "Unknown User";
+                            chatPartnerPic.src = user.profilePic || 'images/icons/default_avatar.jpg';
+                            chatPartnerPic.alt = user.name || "Chat Partner";
+                        } else {
+                            console.warn("User document not found for otherUserId:", otherUserId);
+                            chatPartnerName.textContent = "User Not Found";
+                            chatPartnerPic.src = 'images/icons/default_avatar.jpg';
+                        }
+                    }).catch(error => console.error("Error fetching chat partner user data for header in loadMessages:", error));
+                } else {
+                    console.warn("Could not determine otherUserId for chat:", chatId, chatData);
+                    chatPartnerName.textContent = "Chat Partner Missing";
+                    chatPartnerPic.src = 'images/icons/default_avatar.jpg';
+                }
+            } else {
+                console.warn("Chat data or participants missing for chat:", chatId);
+                chatPartnerName.textContent = "Invalid Chat";
+                chatPartnerPic.src = 'images/icons/default_avatar.jpg';
+            }
+        } else {
+            console.warn("Chat document not found for ID:", chatId);
+            chatPartnerName.textContent = "Chat Not Found";
+            chatPartnerPic.src = 'images/icons/default_avatar.jpg';
+        }
+    }).catch(error => console.error("Error fetching chat document for header in loadMessages:", error));
 }
 
 function displayPendingChat(chat, chatId) {
@@ -361,98 +451,123 @@ function displayActiveChat(chat, chatId) {
 }
 
 function loadChats() {
-    // Unsubscribe from any previous chat list listener
-    // This isn't strictly necessary if loadChats is only called once on auth state change
-    // but it's good practice if it could be called from other places too.
-    // let chatListUnsubscribe = null; // Assuming this is a global variable declared at the top
-
-    // if (chatListUnsubscribe) {
-    //     chatListUnsubscribe();
-    // }
-
     firestore.collection('chats')
         .where('participants', 'array-contains', currentUser.uid)
-        // Order by timestamp to show most recent chats at the top
-        .orderBy('timestamp', 'desc')
+        .orderBy('timestamp', 'desc') // Order by most recent chat activity
         .onSnapshot(snapshot => {
-            // Keep a reference to the AI chat item if it exists in activeChatList
-            const aiChatItem = activeChatList.querySelector('.ai-chat-item');
+            // Store the ID of the chat that was active *before* the list gets rebuilt.
+            const previouslySelectedChatId = currentChatId;
 
-            // --- CRITICAL CHANGE: Clear both lists BEFORE processing the new snapshot ---
-            // This ensures no old, stale chat items remain if a chat status changes
-            // or a chat is removed from the database.
+            // --- CRITICAL: Clear both lists completely before processing the new snapshot ---
             pendingList.innerHTML = '';
             activeChatList.innerHTML = '';
 
-            // Re-append the AI chat item if it was found
-            if (aiChatItem) {
-                activeChatList.appendChild(aiChatItem);
-            }
+            // --- RE-ADD AMORA AI CHAT ITEM FIRST ---
+            const amoraAiChatItem = document.createElement('div');
+            amoraAiChatItem.className = 'chat-item ai-chat-item'; // Make sure your CSS targets these classes
+            amoraAiChatItem.dataset.chatId = 'ai-chat';
+            amoraAiChatItem.innerHTML = `
+                <img src="images/icons/ai_avatar.jpg" alt="Amora AI" class="profile-pic">
+                <div class="chat-info">
+                    <span class="chat-name">Amora AI</span>
+                    <span class="last-message">Your smart companion</span>
+                </div>
+            `;
+            // Attach the click handler for the AI chat item
+            amoraAiChatItem.addEventListener('click', () => {
+                document.querySelectorAll('.chat-item').forEach(item => item.classList.remove('active'));
+                amoraAiChatItem.classList.add('active');
+                currentChatId = 'ai-chat'; // Update global state
+                loadMessages('ai-chat');
+            });
+            activeChatList.appendChild(amoraAiChatItem);
 
-            snapshot.docChanges().forEach(change => {
-                const chat = change.doc.data();
-                const chatId = change.doc.id;
+            // --- Iterate through ALL Firestore docs in the snapshot for other chats ---
+            snapshot.docs.forEach(doc => {
+                const chat = doc.data();
+                const chatId = doc.id;
 
                 if (!chat.participants) {
                     console.warn("Chat document missing participants array:", chatId);
                     return;
                 }
 
-                // Handle 'added' and 'modified' changes
-                if (change.type === 'added' || change.type === 'modified') {
-                    // Check if the chat is already in the DOM (either active or pending list)
-                    // If it exists, remove it first to re-add with updated data/status
-                    let existingActive = activeChatList.querySelector(`[data-chat-id="${chatId}"]`);
-                    let existingPending = pendingList.querySelector(`[data-chat-id="${chatId}"]`);
-
-                    if (existingActive) existingActive.remove();
-                    if (existingPending) existingPending.remove();
-
-                    if (chat.status === 'pending') {
-                        displayPendingChat(chat, chatId);
-                    } else if (chat.status === 'active') {
-                        displayActiveChat(chat, chatId);
-                    }
-                } else if (change.type === 'removed') {
-                    // Handle chat removal from the database
-                    const removedActive = activeChatList.querySelector(`[data-chat-id="${chatId}"]`);
-                    const removedPending = pendingList.querySelector(`[data-chat-id="${chatId}"]`);
-                    if (removedActive) removedActive.remove();
-                    if (removedPending) removedPending.remove();
+                if (chat.status === 'pending') {
+                    displayPendingChat(chat, chatId);
+                } else if (chat.status === 'active') {
+                    displayActiveChat(chat, chatId);
                 }
             });
 
-            // After all changes are processed, ensure the currently selected chat is active
-            document.querySelectorAll('.chat-item').forEach(item => item.classList.remove('active')); // Clear all active states
+            // After all chat items have been (re)appended to the lists:
+            // 1. Clear active state from all other chat items
+            document.querySelectorAll('.chat-item').forEach(item => item.classList.remove('active'));
 
-            if (currentChatId === 'ai-chat' && aiChatItem) {
-                aiChatItem.classList.add('active');
-            } else {
-                const currentActiveItem = activeChatList.querySelector(`[data-chat-id="${currentChatId}"]`);
-                if (currentActiveItem) {
-                    currentActiveItem.classList.add('active');
-                    // --- CRITICAL FOR HEADER UPDATE ON REFRESH/LOGIN ---
-                    // If the current chat is not AI, and it's found in the active list,
-                    // also update the header based on its data.
-                    // You'll need to fetch the 'user' data for this.
-                    const otherUserId = snapshot.docs.find(doc => doc.id === currentChatId)?.data()?.participants.find(id => id !== currentUser.uid);
-                    if (otherUserId) {
-                        firestore.collection('users').doc(otherUserId).get().then(doc => {
-                            if (doc.exists) {
-                                const user = doc.data();
-                                chatPartnerName.textContent = user.name || "Unknown User";
-                                chatPartnerPic.src = user.profilePic || 'images/icons/default_avatar.jpg';
-                                chatPartnerPic.alt = user.name || "Chat Partner";
+ // 2. Re-apply the active class to the chat that was previously selected (if it still exists)
+            //    and ensure its messages are loaded in the main chat area.
+            if (previouslySelectedChatId) {
+                if (previouslySelectedChatId === 'ai-chat') {
+                    amoraAiChatItem.classList.add('active'); // Re-activate the Amora AI chat item
+                    loadMessages('ai-chat'); // Explicitly load AI chat messages
+                } else {
+                    const currentActiveItem = activeChatList.querySelector(`[data-chat-id="${previouslySelectedChatId}"]`);
+                    if (currentActiveItem) {
+                        currentActiveItem.classList.add('active'); // Set active class
+                        // 👇👇👇 THIS IS THE FIX 👇👇👇
+                        loadMessages(previouslySelectedChatId); // Should be previouslySelectedChatId, not previouslySelectedId
+
+                        // Header update logic for the re-selected chat
+                        const chatDataForHeader = snapshot.docs.find(doc => doc.id === previouslySelectedChatId)?.data(); // Also fix here
+                        if (chatDataForHeader && chatDataForHeader.participants) {
+                            const otherUserId = chatDataForHeader.participants.find(id => id !== currentUser.uid);
+                            if (otherUserId) {
+                                firestore.collection('users').doc(otherUserId).get().then(userDoc => {
+                                    if (userDoc.exists) {
+                                        const user = userDoc.data();
+                                        chatPartnerName.textContent = user.name || "Unknown User";
+                                        chatPartnerPic.src = user.profilePic || 'images/icons/default_avatar.jpg';
+                                        chatPartnerPic.alt = user.name || "Chat Partner";
+                                    } else {
+                                        console.warn("User document not found for otherUserId in loadChats header update:", otherUserId);
+                                        chatPartnerName.textContent = "User Not Found";
+                                        chatPartnerPic.src = 'images/icons/default_avatar.jpg';
+                                    }
+                                }).catch(error => {
+                                    console.error("Error fetching user data for header in loadChats:", error);
+                                });
+                            } else {
+                                console.warn("Could not determine otherUserId for chat in loadChats header update:", previouslySelectedChatId, chatDataForHeader); // And here
+                                chatPartnerName.textContent = "Chat Partner Missing";
+                                chatPartnerPic.src = 'images/icons/default_avatar.jpg';
                             }
-                        }).catch(error => {
-                            console.error("Error updating header for active chat:", error);
-                        });
+                        } else {
+                            console.warn("Chat data or participants missing for chat in loadChats header update:", previouslySelectedChatId); // And here
+                            chatPartnerName.textContent = "Invalid Chat";
+                            chatPartnerPic.src = 'images/icons/default_avatar.jpg';
+                        }
+                    } else {
+                        // If the previously selected chat no longer exists (e.g., deleted or status changed)
+                        chatMessages.innerHTML = '<div style="text-align:center; padding: 20px; color: #888;">Chat not found or ended. Please select another chat.</div>';
+                        chatPartnerName.textContent = "Select Chat";
+                        chatPartnerPic.src = 'images/icons/default_avatar.jpg';
+                        currentChatId = null; // Clear the global currentChatId
+                        if (messagesUnsubscribe) {
+                            messagesUnsubscribe(); // Unsubscribe from the old chat's messages
+                        }
                     }
                 }
+            } else {
+                // This block runs on initial page load if no chat is pre-selected.
+                // It should default to selecting Amora AI.
+                amoraAiChatItem.classList.add('active');
+                currentChatId = 'ai-chat';
+                loadMessages('ai-chat');
+                console.log("No previous chat selected, defaulted to Amora AI.");
             }
+
         }, error => {
             console.error("Error loading chat list:", error);
-            // Optionally display an error message to the user
+            // Optionally display a user-friendly error message
         });
 }
 
@@ -714,15 +829,32 @@ emojiBtn.addEventListener('click', (e) => {
     }
 });
 
-document.addEventListener('click', (e) => {
-    // Check if the click was outside both the emoji button and the picker itself
-    // and also ensures click on a specific emoji within the picker doesn't re-trigger.
-    if (!emojiBtn.contains(e.target) && !emojiPicker.contains(e.target)) {
-        emojiPicker.classList.remove('open');
+document.addEventListener('click', (event) => {
+    // Check if the click was on a chat item in the sidebar
+    const chatItem = event.target.closest('.chat-item');
+
+    if (chatItem) {
+        const chatId = chatItem.dataset.chatId;
+        if (chatId) {
+            // Remove 'active' class from all other chat items
+            document.querySelectorAll('.chat-item').forEach(item => item.classList.remove('active'));
+            // Add 'active' class to the clicked item
+            chatItem.classList.add('active');
+
+            currentChatId = chatId; // Update the global variable
+            loadMessages(chatId);   // Load the messages for the selected chat
+        }
+    }
+
+    // Your existing emoji picker close logic:
+    // Make sure 'emojiBtn' and 'emojiPicker' are globally accessible
+    if (emojiBtn && emojiPicker) { // Add null checks for safety
+        if (!emojiBtn.contains(event.target) && !emojiPicker.contains(event.target)) {
+            emojiPicker.classList.remove('open');
+        }
     }
 });
 
-// --- Optional: Re-position on window resize to keep it aligned ---
 window.addEventListener('resize', () => {
     // If emoji picker is open, re-position it (your existing logic)
     if (typeof emojiPicker !== 'undefined' && emojiPicker.classList.contains('open')) {
